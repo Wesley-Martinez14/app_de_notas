@@ -60,6 +60,8 @@ final contentController = TextEditingController();
           onPressed: (){
             if(_formKey.currentState!.validate()){
               print("Valido" +titleController.text);
+
+              Operation.insert(Note(title: titleController.text, content: contentController.text));
             }
           })
         ],),

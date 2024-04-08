@@ -13,7 +13,7 @@ class Note {
   return {
       'id': id,
       'title': title,
-      'content': content,
+      'content': content
     };
   }
 }
