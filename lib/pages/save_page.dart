@@ -3,25 +3,24 @@ import 'package:flutter/material.dart';
 class SavePage extends StatelessWidget {
 
   static const String ROUTE = "/save";
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text("Guardar"),),
-    body: Container(
-      child: _FormSave(),),
-      );
-  }
-}
-
-class _FormSave extends StatelessWidget {
-
-
 final _formKey = GlobalKey<FormState>();
 final titleController = TextEditingController();
 final contentController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+
+    Note note = ModalRoute.of(context).settings.arguments;
+    _init(note);
+    return Scaffold(appBar: AppBar(title: Text("Guardar"),),
+    body: Container(
+      child: _buildForm(note),),
+      );
+  }
+  _init(Note note){
+    titleController.text = note.title;
+    contentController.text = note.content;
+  }
+  Widget _buildForm(Note note){
     return Container(
       padding: EdgeInsets.all(15),
       child: Form(
@@ -59,9 +58,16 @@ final contentController = TextEditingController();
           ElevatedButton(child: Text("Guardar"), 
           onPressed: (){
             if(_formKey.currentState!.validate()){
-              print("Valido" +titleController.text);
-
+              if(note.id > 0){
+                note.title = titleController.text;
+                note.content = contentController.text;
+                Operation.update(note);
+              }
+              else{
               Operation.insert(Note(title: titleController.text, content: contentController.text));
+              }
+
+
             }
           })
         ],),
@@ -69,3 +75,4 @@ final contentController = TextEditingController();
     );
   }
 }
+

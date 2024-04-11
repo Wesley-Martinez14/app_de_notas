@@ -22,10 +22,10 @@ class Operation{
     return database.insert("notes", note.toMap());
   }
 
-  static Future<void> delete(Note note) async{
+  static Future<void> update(Note note) async{
 
     Database database = await _openDB();
-    return database.delete("notes", where: 'id: ?', whereArgs:[note.id]);
+    return database.update("notes",note.toMap(), where: 'id: ?', whereArgs:[note.id]);
 
   }
 

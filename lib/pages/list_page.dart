@@ -11,7 +11,7 @@ class ListPage extends StatelessWidget {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(child: Icon(Icons.add), onPressed: (){
-        Navigator.pushNamed(context, SavePage.ROUTE);
+        Navigator.pushNamed(context, SavePage.ROUTE, arguments: Note.empty());
       },),
       appBar: AppBar( 
         title: Text("Listado"),
@@ -73,6 +73,11 @@ class ListPage extends StatelessWidget {
         }
         child: ListTile(
           title: Text(note[i].title),
+          trailing: MaterialButton(
+            onpressed: (){
+              Navigator.pushNamed(context, SavePage.ROUTE, arguments: notes[i]);
+            }
+            child: Icon(Icons.edit)),
         ),
        );
       }
