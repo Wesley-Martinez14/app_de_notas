@@ -1,35 +1,35 @@
 import 'package:app_de_notas/pages/save_page.dart';
 import 'package:flutter/material.dart';
-import 'package:app_de_notas/lib/db/operation.dart';
+import 'package:app_de_notas/db/operation.dart';
 import 'package:app_de_notas/models/note.dart';
 
 class ListPage extends StatelessWidget {
 
+  // ignore: constant_identifier_names
   static const String ROUTE = "/";
+
+  const ListPage({super.key});
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(child: Icon(Icons.add), onPressed: (){
+      floatingActionButton: FloatingActionButton(child: const Icon(Icons.add), onPressed: (){
         Navigator.pushNamed(context, SavePage.ROUTE, arguments: Note.empty());
       },),
       appBar: AppBar( 
-        title: Text("Listado"),
+        title: const Text("Listado"),
         ),
-      body: Container(
-        //child: ListView(
-          child: _Mylist(),
-       ),
+      body: _Mylist(),
       );
      } 
     }
 
     class _Mylist extends StatefulWidget {
       @override
-      _MylistState createState() => __MylistState();
+      _MylistState createState() => _MylistState();
     }
 
-    class __MylistState extends State<_Mylist> {
+    class _MylistState extends State<_Mylist> {
 
       List<Note> notes = [];
 
@@ -40,13 +40,14 @@ class ListPage extends StatelessWidget {
         super.initState(); 
       }
 
-      @override
+     @override
       Widget build(BuildContext context) {
-        return ListView.build(
+        return ListView.builder(
           itemCount: notes.length,
-          itemBuilder: (_,i) => _createItem(i),
+          itemBuilder: (_, i) => _createItem(i),
         );
-    }
+      }
+
 
        _loadData() async{
         List<Note> auxNote = await Operation.notes();
@@ -58,26 +59,27 @@ class ListPage extends StatelessWidget {
 
       _createItem(int i){
         return Dismissible(
-        key: key(i.toString()),
-        direction: DismissDirection.starToEnd,
+        key: Key(i.toString()),
+        direction: DismissDirection.startToEnd,
         background: Container(
-          color: Colors.red,
-          padding: EdgeInsets.only(left: 5),
-          child: Align(
-            alimegment: Alimegment.centerLeft,
+          color: Colors.red,   
+          padding: const EdgeInsets.only(left: 5),
+          child: const Align(
+            alignment: Alignment.centerLeft,
             child: Icon(Icons.delete, color: Colors.white,)),
         ),
         onDismissed: (direction){
+          // ignore: avoid_print
           print(direction);
           Operation.delete(notes[i]);
-        }
+        },
         child: ListTile(
-          title: Text(note[i].title),
+          title: Text(notes[i].title),
           trailing: MaterialButton(
-            onpressed: (){
+            onPressed: (){
               Navigator.pushNamed(context, SavePage.ROUTE, arguments: notes[i]);
-            }
-            child: Icon(Icons.edit)),
+            },
+            child: const Icon(Icons.edit)),
         ),
        );
       }

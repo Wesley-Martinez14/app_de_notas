@@ -1,17 +1,22 @@
+import 'package:app_de_notas/db/operation.dart';
+import 'package:app_de_notas/models/note.dart';
 import 'package:flutter/material.dart';
 
 class SavePage extends StatelessWidget {
 
+  // ignore: constant_identifier_names
   static const String ROUTE = "/save";
 final _formKey = GlobalKey<FormState>();
 final titleController = TextEditingController();
 final contentController = TextEditingController();
+
+  SavePage({super.key});
   @override
   Widget build(BuildContext context) {
 
-    Note note = ModalRoute.of(context).settings.arguments;
+    Note note = ModalRoute.of(context)?.settings.arguments as Note;
     _init(note);
-    return Scaffold(appBar: AppBar(title: Text("Guardar"),),
+    return Scaffold(appBar: AppBar(title: const Text("Guardar"),),
     body: Container(
       child: _buildForm(note),),
       );
@@ -22,7 +27,7 @@ final contentController = TextEditingController();
   }
   Widget _buildForm(Note note){
     return Container(
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       child: Form(
         key: _formKey,
         child: Column(children: <Widget>[
@@ -34,12 +39,12 @@ final contentController = TextEditingController();
               }
               return null;
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: "Titulo",
               border: OutlineInputBorder() //borderRadius: BorderRadius.all(Radius.circular(50))
             ),
           ),
-          SizedBox(height: 15,),
+          const SizedBox(height: 15,),
           TextFormField(
             controller: contentController,
             maxLines: 8,
@@ -50,12 +55,12 @@ final contentController = TextEditingController();
               }
               return null;
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: "Contenido",
               border: OutlineInputBorder() //borderRadius: BorderRadius.all(Radius.circular(50))
             ),
           ),
-          ElevatedButton(child: Text("Guardar"), 
+          ElevatedButton(child: const Text("Guardar"), 
           onPressed: (){
             if(_formKey.currentState!.validate()){
               if(note.id > 0){
@@ -64,7 +69,7 @@ final contentController = TextEditingController();
                 Operation.update(note);
               }
               else{
-              Operation.insert(Note(title: titleController.text, content: contentController.text));
+              Operation.insert(Note(title: titleController.text, content: contentController.text, id: contentController.hashCode));
               }
 
 
