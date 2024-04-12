@@ -60,19 +60,18 @@ final contentController = TextEditingController();
               border: OutlineInputBorder() //borderRadius: BorderRadius.all(Radius.circular(50))
             ),
           ),
-          ElevatedButton(child: const Text("Guardar"), 
-          onPressed: (){
-            if(_formKey.currentState!.validate()){
-              if(note.id > 0){
-                note.title = titleController.text;
-                note.content = contentController.text;
-                Operation.update(note);
-              }
-              else{
-              Operation.insert(Note(title: titleController.text, content: contentController.text, id: contentController.hashCode));
-              }
-
-
+          ElevatedButton(
+            child: const Text("Guardar"), 
+            onPressed: (){
+              if(_formKey.currentState!.validate()){
+                if(note.id >= 0 ){
+                  note.title = titleController.text;
+                  note.content = contentController.text;
+                  Operation.update(note);
+                }
+                else{
+                  Operation.insert(Note(title: titleController.text, content: contentController.text, id: contentController.hashCode));
+                }
             }
           })
         ],),

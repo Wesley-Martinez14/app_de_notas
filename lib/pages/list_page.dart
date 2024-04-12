@@ -12,24 +12,16 @@ class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(child: const Icon(Icons.add), onPressed: (){
-        Navigator.pushNamed(context, SavePage.ROUTE, arguments: Note.empty());
-      },),
-      appBar: AppBar( 
-        title: const Text("Listado"),
-        ),
-      body: _Mylist(),
-      );
+    return __Mylist();
      } 
     }
 
-    class _Mylist extends StatefulWidget {
+    class __Mylist extends StatefulWidget {
       @override
-      _MylistState createState() => _MylistState();
+      __MylistState createState() => __MylistState();
     }
 
-    class _MylistState extends State<_Mylist> {
+    class __MylistState extends State<__Mylist> {
 
       List<Note> notes = [];
 
@@ -42,10 +34,26 @@ class ListPage extends StatelessWidget {
 
      @override
       Widget build(BuildContext context) {
-        return ListView.builder(
-          itemCount: notes.length,
-          itemBuilder: (_, i) => _createItem(i),
-        );
+        return Scaffold(
+      floatingActionButton: 
+      FloatingActionButton(
+        child: const Icon(Icons.add), 
+        onPressed: (){
+          Navigator.pushNamed(context, SavePage.ROUTE, arguments: Note.empty()).then((value) => setState(() {
+                _loadData();
+              }));
+        },
+      ),
+      appBar: AppBar( 
+        title: const Text("Listado"),
+        ),
+      body: ListView.builder(
+        itemCount: notes.length,
+        itemBuilder: (_, i) => _createItem(i),
+      ),
+      );
+        
+        
       }
 
 
@@ -77,7 +85,9 @@ class ListPage extends StatelessWidget {
           title: Text(notes[i].title),
           trailing: MaterialButton(
             onPressed: (){
-              Navigator.pushNamed(context, SavePage.ROUTE, arguments: notes[i]);
+              Navigator.pushNamed(context, SavePage.ROUTE, arguments: notes[i]).then((value) => setState(() {
+                _loadData();
+              }));
             },
             child: const Icon(Icons.edit)),
         ),
