@@ -2,29 +2,56 @@ import 'package:app_de_notas/db/operation.dart';
 import 'package:app_de_notas/models/note.dart';
 import 'package:flutter/material.dart';
 
-class SavePage extends StatelessWidget {
+class SavePage extends StatefulWidget {
 
   // ignore: constant_identifier_names
   static const String ROUTE = "/save";
+
+  const SavePage({super.key});
+
+  @override
+  State<SavePage> createState() => _SavePageState();
+}
+
+class _SavePageState extends State<SavePage> {
 final _formKey = GlobalKey<FormState>();
+
 final titleController = TextEditingController();
+
 final contentController = TextEditingController();
 
-  SavePage({super.key});
   @override
   Widget build(BuildContext context) {
 
     Note note = ModalRoute.of(context)?.settings.arguments as Note;
     _init(note);
-    return Scaffold(appBar: AppBar(title: const Text("Guardar"),),
-    body: Container(
-      child: _buildForm(note),),
-      );
+    return PopScope(
+      canPop: false, // Prevent default back button behavior
+      onPopInvoked: (didPop) async {
+        if (didPop) return; // Don't pop if user didn't confirm
+
+        final navigator = Navigator.of(context);
+        final shouldPop = await _showBackDialog();
+        if (shouldPop ?? false) {
+          navigator.pop();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Guardar"),
+        ),
+        body: Container(
+          child: _buildForm(note),
+        ),
+      ),
+    );
   }
+
   _init(Note note){
     titleController.text = note.title;
     contentController.text = note.content;
   }
+
   Widget _buildForm(Note note){
     return Container(
       padding: const EdgeInsets.all(15),
@@ -75,6 +102,26 @@ final contentController = TextEditingController();
             }
           })
         ],),
+      ),
+    );
+  }
+  
+  Future<bool?> _showBackDialog() async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Regresar a la pagina anterior?"),
+        content: const Text("Hay informacion sin guardar."),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("Si"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("No"),
+          ),
+        ],
       ),
     );
   }

@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       initialRoute: ListPage.ROUTE,
       routes: {
         ListPage.ROUTE : (_) => const ListPage(),
-        SavePage.ROUTE : (_) => SavePage()
+        SavePage.ROUTE : (_) => const SavePage()
 
       },
     );
